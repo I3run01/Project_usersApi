@@ -8,7 +8,12 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  
   async create(createUserDto: CreateUserDto) {
     return this.userModel.create(createUserDto);
+  }
+
+  async findOne(id: string) {
+    return await this.userModel.findOne({id:id})
   }
 }

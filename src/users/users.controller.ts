@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Controller, Post, Body, Res, Get, Req, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
 import {Response, Request} from 'express';
+import { request } from 'http';
 
 @Controller('users')
 export class UsersController {
@@ -35,6 +36,31 @@ export class UsersController {
     response.cookie('jwt', jwt, {httpOnly: true});
 
     return user
+  }
+
+  @Get()
+  async user(@Req() request: Request) {
+    try {
+      const cookie = request.cookies['jwt']
+
+      const data = await this.jwtService.verifyAsync(cookie)
+
+      console.log(data)
+
+      if(!data) {
+        throw new UnauthorizedException()
+      }
+
+      let user = await this.usersService.findOne(data['id'])
+
+      delete user.password
+
+      return user
+
+    } catch {
+
+      throw new UnauthorizedException()
+    }
   }
 
 }
