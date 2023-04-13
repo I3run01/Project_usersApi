@@ -36,3 +36,4 @@ lerna-debug.log*
 
 # security
 .env
+src\auths\constants.ts
