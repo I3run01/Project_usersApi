@@ -6,8 +6,8 @@ import { AuthsModule } from './auths/auths.module'
 
 @Module({
   imports: [
-    UsersModule,
     AuthsModule,
+    UsersModule,
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_URL as string),
   ],
