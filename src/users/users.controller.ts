@@ -26,7 +26,9 @@ export class UsersController {
 
     let user = await this.usersService.create(createUserDto);
 
-    user.password = null
+    delete user.password
+
+    if(user.password) user.password = null
 
     const jwt = await this.jwtService.signAsync({id: user.id});
 
