@@ -4,7 +4,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
 import {Response, Request} from 'express';
-import { request } from 'http';
 
 @Controller('users')
 export class UsersController {
