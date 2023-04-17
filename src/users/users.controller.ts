@@ -40,25 +40,28 @@ export class UsersController {
   @Get()
   async user(@Req() request: Request) {
     try {
-      const cookie = request.cookies['jwt']
+      const cookie = await request.cookies['jwt']
 
       const data = await this.jwtService.verifyAsync(cookie)
 
       console.log(data)
 
+
       if(!data) {
         throw new UnauthorizedException()
       }
+      console.log(data.id)
 
-      let user = await this.usersService.findOne(data['id'])
+      let user = await this.usersService.findOne(data.id)
+      console.log(user)
 
       delete user.password
+
 
       return user
 
     } catch {
-
-      throw new UnauthorizedException()
+        throw new UnauthorizedException()
     }
   }
 
