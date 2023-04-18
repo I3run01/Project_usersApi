@@ -20,4 +20,8 @@ export class UsersService {
   async findByEmail(email: string) {
     return await this.userModel.findOne({email})
   }
+
+  async deleteOne(id: string) {
+    return await this.userModel.deleteOne({_id: id}) 
+  }
 }

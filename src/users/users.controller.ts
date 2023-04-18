@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res, Get, Req, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Res, Get, Req, Delete, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash, compare as bcryptCompare } from 'bcrypt';
@@ -80,25 +80,28 @@ export class UsersController {
 
       const data = await this.jwtService.verifyAsync(cookie)
 
-      console.log(data)
-
-
       if(!data) {
         throw new UnauthorizedException()
       }
-      console.log(data.id)
 
       let user = await this.usersService.findById(data.id)
-      console.log(user)
 
       delete user.password
-
 
       return user
 
     } catch {
         throw new UnauthorizedException()
     }
+  }
+
+  @Delete()
+  async DeleteOne(@Req() request: Request) {
+    const cookie = await request.cookies['jwt']
+
+    const data = await this.jwtService.verifyAsync(cookie)
+    
+    return this.usersService.deleteOne(data.id)
   }
 
 }
