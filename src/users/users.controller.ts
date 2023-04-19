@@ -19,12 +19,18 @@ export class UsersController {
     @Res({passthrough: true}) response: Response
   ) {
 
+    let user = await this.usersService.findByEmail(email)
+
+    if(user) {
+      throw new BadRequestException('user already exists')
+    }
+
     const createUserDto:CreateUserDto = {
       email,
       password: await hash(password, 10)
     }
 
-    let user = await this.usersService.create(createUserDto);
+    user = await this.usersService.create(createUserDto);
 
     delete user.password
 
