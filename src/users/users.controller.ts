@@ -110,4 +110,30 @@ export class UsersController {
     return this.usersService.deleteOne(data.id)
   }
 
+  @Post('googleSignin')
+  async googleSignIn(
+    @Body('email') email:string,
+    @Res({passthrough: true}) response: Response
+  ) {
+    
+    const user = await this.usersService.findByEmail(email)
+
+    const jwt = await this.jwtService.signAsync({id: user.id});
+
+    response.cookie('jwt', jwt, {httpOnly: true});
+
+    if(!user) {
+      return await this.usersService.create({
+        email: email,
+        password: null
+      });
+    }
+
+    delete user.password
+
+    if (user.password) user.password = null
+
+    return user
+  }
+
 }
