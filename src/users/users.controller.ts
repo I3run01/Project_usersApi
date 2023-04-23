@@ -115,6 +115,8 @@ export class UsersController {
   @Post('googleSignin')
   async googleSignIn(
     @Body('email') email:string,
+    @Body('name') name:string,
+    @Body('picture') picture:string,
     @Res({passthrough: true}) response: Response
   ) {
     
@@ -122,10 +124,10 @@ export class UsersController {
     
     if(!user) {
       user = await this.usersService.create({
-        name: null,
+        name: name,
         email: email,
         password: await hash(String(Math.random()), 10),
-        avatarImage: null
+        avatarImage: picture
       });
     }
     
