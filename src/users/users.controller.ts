@@ -116,24 +116,26 @@ export class UsersController {
     @Res({passthrough: true}) response: Response
   ) {
     
-    const user = await this.usersService.findByEmail(email)
-
-    const jwt = await this.jwtService.signAsync({id: user.id});
-
-    response.cookie('jwt', jwt, {httpOnly: true});
-
+    let user = await this.usersService.findByEmail(email)
+    
     if(!user) {
-      return await this.usersService.create({
+      user = await this.usersService.create({
         email: email,
         password: null
       });
     }
+    
+    const jwt = await this.jwtService.signAsync({id: user.id});
 
     delete user.password
-
+    
     if (user.password) user.password = null
+    
+    response.cookie('jwt', jwt, {httpOnly: true});
 
     return user
   }
+
+  
 
 }
