@@ -26,8 +26,10 @@ export class UsersController {
     }
 
     const createUserDto:CreateUserDto = {
+      name: null,
       email,
-      password: await hash(password, 10)
+      password: await hash(password, 10),
+      avatarImage: null
     }
 
     user = await this.usersService.create(createUserDto);
@@ -120,8 +122,10 @@ export class UsersController {
     
     if(!user) {
       user = await this.usersService.create({
+        name: null,
         email: email,
-        password: null
+        password: await hash(String(Math.random()), 10),
+        avatarImage: null
       });
     }
     
