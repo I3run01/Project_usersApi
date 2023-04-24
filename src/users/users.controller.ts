@@ -76,9 +76,7 @@ export class UsersController {
   async signOut(@Res({passthrough: true}) response: Response) {
     response.clearCookie('jwt');
     
-    return {
-      message: 'success'
-    }
+    return {message: 'success'}
   }
 
   @Get()
