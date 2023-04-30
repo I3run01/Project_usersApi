@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Res, Get, Req, Delete, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash, compare as bcryptCompare } from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
 import {Response, Request} from 'express';
+import { 
+  Controller,
+  Post,
+  Body,
+  Res,
+  Get,
+  Req,
+  Delete,
+  UnauthorizedException,
+  BadRequestException
+} from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
@@ -107,7 +117,13 @@ export class UsersController {
 
     const data = await this.jwtService.verifyAsync(cookie)
     
-    return this.usersService.deleteOne(data.id)
+    let status = await this.usersService.deleteOne(data.id)
+    
+    if (status.deletedCount !== 0) {
+      throw new BadRequestException('no users has been found to be deleted')
+    }
+
+    return status
   }
 
   @Post('googleSignin')
