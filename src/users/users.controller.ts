@@ -58,7 +58,7 @@ export class UsersController {
     }
 
     if(! await bcryptCompare(password, user.password)) {
-      throw new BadRequestException('invaid credentials')
+      throw new BadRequestException('invalid credentials')
     }
 
     const jwt = await this.jwtService.signAsync({id: user.id});
